@@ -4,7 +4,7 @@ import {
     View, 
     Text, 
     TouchableOpacity,
-   
+    Vibration
  } from 'react-native'
 
 import { ResultImc } from './ResultImc'
@@ -17,11 +17,17 @@ export function Form() {
    const [messageImc, setMessageImc] = useState('Preencha o peso e altura') // Mensagem de estado
    const [imc, setImc] = useState(null) // Valor do IMC
    const [textButton, setTextButton] = useState('Calcular') // Texto do botão
-   const [errorMessage, setErrorMessage] = useState(null) 
+   const [errorMessageHeight, setErrorMessageHeight] = useState(null)
+   const [errorMessageWeight, setErrorMessageWeight] = useState(null) 
 
    function verificationImc(){
-    if(imc == null){
-        setErrorMessage('campo obrigatório*')
+    if(height == null){
+        Vibration.vibrate();
+        setErrorMessageHeight('campo obrigatório*')
+    } if(weight == null){
+        Vibration.vibrate();
+        setErrorMessageWeight('campo obrigatório*')
+
     }
    }
 
@@ -38,11 +44,14 @@ export function Form() {
            setWeight(null) // Redefine o peso para nulo
            setMessageImc('Seu IMC é igual: ')
            setTextButton('Calcular Novamente')
-           setErrorMessage(null)
+           setErrorMessageHeight(null)
+           setErrorMessageWeight(null)
            return
        }
+       setErrorMessageHeight(null)
+       setErrorMessageWeight(null)
+       setImc(null) // Redefine o IMC para nulo      
        verificationImc()
-       setImc(null) // Redefine o IMC para nulo
        setTextButton('Calcular')
        setMessageImc('Preencha o peso e altura')
        
@@ -52,7 +61,7 @@ export function Form() {
        <View style={styles.formContext}>
            <View style={styles.form}>
                <Text style={styles.formLabel}>Altura</Text>
-               <Text style={styles.errorMessage}>{errorMessage}</Text>
+               <Text style={styles.errorMessage}>{errorMessageHeight}</Text>
                <TextInput
                    style={styles.input}
                    onChangeText={setHeight}
@@ -61,7 +70,7 @@ export function Form() {
                    value={height}
                />
                <Text style={styles.formLabel}>Peso</Text>
-               <Text style={styles.errorMessage}>{errorMessage}</Text>
+               <Text style={styles.errorMessage}>{errorMessageWeight}</Text>
                <TextInput
                    style={styles.input}
                    onChangeText={setWeight}
