@@ -6,7 +6,8 @@ import {
     TouchableOpacity,
     Vibration,
     Pressable,
-    Keyboard
+    Keyboard, 
+    FlatList
  } from 'react-native'
 
 import { ResultImc } from './ResultImc'
@@ -21,6 +22,8 @@ export function Form() {
    const [textButton, setTextButton] = useState('Calcular') // Texto do botão
    const [errorMessageHeight, setErrorMessageHeight] = useState(null)
    const [errorMessageWeight, setErrorMessageWeight] = useState(null) 
+   const [imcList, setImcList] = useState([]) 
+   
 
    function verificationImc(){
     if(height == null){
@@ -37,7 +40,9 @@ export function Form() {
    function imcCalculator() {
        let formatedWeight = weight.replace(',', '.')
        let formatedHeight = height.replace(',', '.')
-       return setImc((formatedWeight / (formatedHeight * formatedHeight)).toFixed(2))
+       let totalImc = (formatedWeight / (formatedHeight * formatedHeight)).toFixed(2)
+       setImcList ((arr) => [...arr, {id: new Date().getTime(), imc:totalImc}])
+       setImc(totalImc)
    }
 
    // Função para validar e atualizar o IMC
@@ -102,6 +107,24 @@ export function Form() {
                 </TouchableOpacity> 
             </View>
            }
+           <FlatList 
+            showsVerticalScrollIndicator={false}
+            style={styles.listImcs}
+            data={imcList.reverse()}
+            renderItem={({item}) => {
+                return(
+                    <Text style={styles.resultImcItem}>
+                        <Text style={styles.textRsultItemList}>Resultado IMC é = </Text>
+                        {item.imc}
+                    </Text>
+                ) 
+            }}
+            key={(item) => {
+                item.id
+            }
+            }
+            
+           />
            </View>
    )
 }

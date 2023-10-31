@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         height:'40%'
     },
     listImcs:{
-        marginTop:2
+        marginTop:20
     },
     resultImcItem:{
         fontSize:26,
